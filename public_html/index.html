@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script type="text/javascript" src="ressources/js/jquery.canvasjs.min.js"></script>
+        <meta charset="utf-8" />
+        <title>Learner</title>
+        <style>
+            * { padding: 0; margin: 0px; }
+            html { height: 100%; }
+            body { background-image: url('ressources/img/stardust.png'); background-repeat: repeat; height: 100%; }
+            #top { display: flex; flex-direction: row; justify-content: center; border-bottom: 1px solid grey; padding: 5px; background: #e5e5e5; }
+            #content { height: available; }
+            canvas { position: relative; background: rgba(50,50,50,.5); display: block; margin: 5px auto; border:1px solid black;}
+            #user_input { margin-right: 5px; padding-right: 5px; display: flex; flex-direction: column; width: 150px; }
+            #user_input:not(:last-child) { border-right: 1px solid grey; }
+            #user_input * { margin: 3px; }
+            #generation { font-weight: bold; }
+            #lifetimes { width: 100px; }
+            #chartContainer { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%)}
+            .box { border-top:1px solid grey; }
+            #user_nextlevel { width: 25%; }
+        </style>
+    </head>
+    <body>
+        <div id="top">
+            <div id="user_input">
+                X:<input type="number" id="user_width" value="11">
+                Y:<input type="number" id="user_height" value="7">
+                Difficulty:<input type="number" id="user_diffAmount"  value="1">
+            </div>
+            <div id="user_input">
+                Children:<input type="text" id="user_contestants" value="100">
+                Mutation probability:<input type="text" id="user_mutation" value="10">
+                Game Speed:<input type="number" id="user_speed" value="0">
+            </div>
+            <div id="user_input">
+                World seed:<input type="number" id="user_seed" value="564">
+                Perception-Mode:
+                <select id="perception_mode" name="perception_mode">
+                    <option value="absolute">Absolute</option>
+                    <option value="relative" selected>Relative</option>
+                </select>
+                Move dead to bottom:
+                <select id="user_rmOnDeath" name="remove_on_death">
+                    <option value="true" selected>Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+            <div id="user_input">
+                <button type="button" id="run">Start run!</button>
+                <button type="button" id="pause">Pause</button>
+                <button type="button" id="play">Resume</button>
+                <div class="box">
+                    <input type="checkbox" id="user_autolevel" name="autolevel" value="true" checked> Next level every
+                    <input type="number" id="user_nextlevel" value="20"> Generations
+                </div>
+            </div>
+            <div id="user_input">
+                <span id="generation">Generation 1</span>
+                <select id="lifetimes" name="lifetimes" size="6"></select>
+            </div>
+            <div class="last_winner">
+            </div>
+            <div id="user_input">
+                <button type="button" onclick="$('#chartContainer').toggle();">Toggle chart</button>
+                <div class="box">
+                    <input type="checkbox" id="user_drawships" name="drawships" value="true" checked> Draw ships
+                </div>
+            </div>
+        </div>
+        <div id="content">
+
+        </div>
+        <script src="ressources/js/seedrandom.min.js"></script>
+        <script src="ressources/js/game.js"></script>
+        <div id="chartContainer" style="height: 300px; width: 600px;"></div>
+    </body>
+</html>
