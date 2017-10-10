@@ -190,6 +190,7 @@ function MutateValue(val) {
 // GAME FUNCTIONS
 function draw() {
     world.slide();
+    updateCurrentStats();
     for (var i = 0; i < contestants; i++)
     {
         ships[i].act();
@@ -243,6 +244,11 @@ function draw() {
         getWorldSeed();
     }
     worldtime++;
+}
+
+function updateCurrentStats() {
+    $('#show_worldtime').text(worldtime);
+    $('#show_creatures_alive').text(contestants_alive);
 }
 
 function reset() {
