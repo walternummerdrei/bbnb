@@ -34,7 +34,7 @@ canvas {
     border: 1px solid black;
 }
 
-#user_input {
+.user_input {
     margin-right: 5px;
     padding-right: 5px;
     display: flex;
@@ -42,11 +42,11 @@ canvas {
     width: 150px;
 }
 
-#user_input:not(:last-child) {
+.user_input:not(:last-child) {
     border-right: 1px solid grey;
 }
 
-#user_input * {
+.user_input * {
     margin: 3px;
 }
 

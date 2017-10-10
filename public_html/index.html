@@ -2,53 +2,57 @@
 <html>
     <head>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-        <script type="text/javascript" src="resources/js/jquery.canvasjs.min.js"></script>
+        <script type="text/javascript" src="resources/js/util/jquery.canvasjs.min.js"></script>
         <meta charset="utf-8" />
         <title>Learner</title>
         <link rel="stylesheet" type="text/css" href="resources/css/style.css">
     </head>
-    
+
     <body>
         <div id="top">
-            <div id="user_input">
-                X:<input type="number" id="user_width" value="11">
-                Y:<input type="number" id="user_height" value="7">
-                Difficulty:<input type="number" id="user_diffAmount"  value="1">
-            </div>
-            <div id="user_input">
-                Children:<input type="text" id="user_contestants" value="100">
-                Mutation probability:<input type="text" id="user_mutation" value="10">
-                Game Speed:<input type="number" id="user_speed" value="0">
-            </div>
-            <div id="user_input">
+            <div class="user_input user_input_left">
+                <h3>World</h3>
+                Width:<input type="number" id="user_width" value="11">
+                Height:<input type="number" id="user_height" value="7">
+                Difficulty:<input type="number" id="user_diffAmount"  value="15">
+                X-distance between obstacles:<input type="number" id="user_obstacle_distance" value="1">
                 World seed:<input type="number" id="user_seed" value="564">
+                <div class="box">
+                        <input type="checkbox" id="user_autolevel" name="autolevel" value="true" checked> New seed every
+                        <input type="number" id="user_nextlevel" value="20"> Generations
+                    </div>
+            </div>
+            <div class="user_input user_input_left">
+                <h3>Creatures</h3>
+                Generation size:<input type="text" id="user_contestants" value="100">
+                Mutation probability:<input type="text" id="user_mutation" value="10">
                 Perception-Mode:
                 <select id="perception_mode" name="perception_mode">
-                    <option value="absolute">Absolute</option>
+                    <option value="absolute">Absolute (broken)</option>
                     <option value="relative" selected>Relative</option>
                 </select>
+            </div>
+            <div class="user_input user_input_left">
+                <h3>Options</h3>
+                Simulation Speed:<input type="number" id="user_speed" value="0">
                 Move dead to bottom:
                 <select id="user_rmOnDeath" name="remove_on_death">
                     <option value="true" selected>Yes</option>
                     <option value="false">No</option>
                 </select>
             </div>
-            <div id="user_input">
+            <div class="user_input user_input_center">
                 <button type="button" id="run">Start run!</button>
                 <button type="button" id="pause">Pause</button>
                 <button type="button" id="play">Resume</button>
-                <div class="box">
-                    <input type="checkbox" id="user_autolevel" name="autolevel" value="true" checked> Next level every
-                    <input type="number" id="user_nextlevel" value="20"> Generations
-                </div>
             </div>
-            <div id="user_input">
+            <div class="user_input user_input_right">
                 <span id="generation">Generation 1</span>
                 <select id="lifetimes" name="lifetimes" size="6"></select>
             </div>
             <div class="last_winner">
             </div>
-            <div id="user_input">
+            <div class="user_input">
                 <button type="button" onclick="$('#chartContainer').toggle();">Toggle chart</button>
                 <div class="box">
                     <input type="checkbox" id="user_drawships" name="drawships" value="true" checked> Draw ships
@@ -58,7 +62,7 @@
         <div id="content">
 
         </div>
-        <script src="resources/js/seedrandom.min.js"></script>
+        <script src="resources/js/util/seedrandom.min.js"></script>
         <script src="resources/js/game.js"></script>
         <div id="chartContainer" style="height: 300px; width: 600px;"></div>
     </body>

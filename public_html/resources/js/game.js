@@ -4,39 +4,47 @@ function World(x, y) {
     this.height = y;
     this.space = createArray(x, y);
     this.initialize();
-    
 }
 
 World.prototype.slide = function () {
-    for (var i = 0; i < this.width - 1; i++)
-    {
-        for (var j = 0; j < this.height; j++)
-        {
+    for (var i = 0; i < this.width - 1; i++) {
+        for (var j = 0; j < this.height; j++) {
             this.space[i][j] = this.space[i + 1][j];
         }
     }
-    
+
+    var amountOfNewObstacles = 0;
+
     for (var i = 0; i < this.height; i++)
     {
-        if (Math.random() < 100 / (this.height * difficultyAmount) / 100)
-        {
-            this.space[this.width - 1][i] = 1;
-        } else
-        {
+        if (worldtime % (obstacleXDistance + 1) === 0) {
+            if ((Math.random() * 100) < difficultyAmount) {
+
+                this.space[this.width - 1][i] = 1;
+                amountOfNewObstacles++;
+
+                if (amountOfNewObstacles >= this.height) {
+
+                    for (var i = 0; i < this.height; i++) {
+                        this.space[this.width - 1][i] = 0;
+                    }
+                }
+            } else {
+                this.space[this.width - 1][i] = 0;
+            }
+        } else {
             this.space[this.width - 1][i] = 0;
         }
+        
     }
     
     
 };
 
 World.prototype.initialize = function () {
-    for (var i = 0; i < this.width; i++)
-    {
-        for (var j = 0; j < this.height; j++)
-        {
-            if (this.space[i][j] === undefined)
-            {
+    for (var i = 0; i < this.width; i++) {
+        for (var j = 0; j < this.height; j++) {
+            if (this.space[i][j] === undefined) {
                 this.space[i][j] = 0;
             }
         }
@@ -324,7 +332,7 @@ function reset() {
     contestants_alive = contestants;
     mutation_probability = ($('#user_mutation').val() / 100);
     difficultyAmount = parseFloat($('#user_diffAmount').val());
-    difficultyDistance = parseInt($('#user_diffDist').val());
+    obstacleXDistance = parseInt($('#user_obstacle_distance').val());
     speed = parseInt($('#user_speed').val());
     remove_on_death = $('#user_rmOnDeath option:selected').val();
     user_seed = parseInt($('#user_seed').val());
@@ -460,6 +468,7 @@ $('#run').click(function () {
     contestants = parseInt($('#user_contestants').val());
     mutation_probability = ($('#user_mutation').val() / 100);
     difficultyAmount = parseFloat($('#user_diffAmount').val());
+    obstacleXDistance = parseInt($('#user_obstacle_distance').val());
     speed = parseInt($('#user_speed').val());
     perception_mode = $('#perception_mode option:selected').val();
     remove_on_death = $('#user_rmOnDeath option:selected').val();
