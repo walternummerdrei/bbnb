@@ -14,8 +14,8 @@
                 <h3>World</h3>
                 Width:<input type="number" id="user_width" value="11">
                 Height:<input type="number" id="user_height" value="7">
-                Difficulty:<input type="number" id="user_diffAmount"  value="15">
-                X-distance between obstacles:<input type="number" id="user_obstacle_distance" value="1">
+                Difficulty (%):<input type="number" id="user_diffAmount"  value="40">
+                X-distance between obstacles:<input type="number" id="user_obstacle_distance" value="2">
                 World seed:<input type="number" id="user_seed" value="564">
                 <div class="box">
                         <input type="checkbox" id="user_autolevel" name="autolevel" value="true" checked> New seed every
@@ -25,7 +25,8 @@
             <div class="user_input user_input_left">
                 <h3>Creatures</h3>
                 Generation size:<input type="text" id="user_contestants" value="100">
-                Mutation probability:<input type="text" id="user_mutation" value="10">
+                Survivors per gen.:<input type="number" id="user_survivor_amount" value="10">
+                Mutation probability:<input type="number" id="user_mutation" value="10">
                 Perception-Mode:
                 <select id="perception_mode" name="perception_mode">
                     <option value="absolute">Absolute (broken)</option>

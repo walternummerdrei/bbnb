@@ -24,7 +24,6 @@ World.prototype.slide = function () {
                 amountOfNewObstacles++;
 
                 if (amountOfNewObstacles >= this.height) {
-
                     for (var i = 0; i < this.height; i++) {
                         this.space[this.width - 1][i] = 0;
                     }
@@ -92,31 +91,36 @@ ShipChild.prototype.act = function () {
     if (this.state == 1)
     {
         this.lifetime++; // Age, the higher the fitter 
-        
-        if (perception_mode === "absolute")
+
+        for (var i = 0 - (world.height - 1); i < world.height; i++)
         {
-            for (var i = 0; i < world.height; i++)
+            this.decision[i] = 0;
+        }
+        
+        for (var i = 0; i < this.behaviour.length; i++)
+        {
+            for (var j = 0 - (world.height - 1); j < world.height; j++)
             {
-                this.decision[i] = 0;
-            }
-            
-            for (var i = 0; i < world.width; i++)
-            {
-                for (var j = 0; j < world.height; j++)
+                if (this.position + j < world.height - 1 && this.position + j >= 0)
                 {
-                    if (world.space[i][j] == 0)
+                    var current_field = world.space[i][this.position + j];
+                    if (current_field == 0)
                     {
-                        this.decision[j] = this.decision[j] + this.behaviour[i][j][0];
-                    } else if (world.space[i][j] == 1)
+                        this.decision[j] = this.decision[j] + this.behaviour[i][j + (world.height - 1)][0];
+                    } else if (current_field == 1)
                     {
-                        this.decision[j] = this.decision[j] + this.behaviour[i][j][1];
+                        this.decision[j] = this.decision[j] + this.behaviour[i][j + (world.height - 1)][1];
                     }
                 }
             }
-            
-            this.target = 0;
-            var highestValue = this.target;
-            for (var i = 0; i < world.height; i++)
+        }
+        
+        this.target = 0;
+        var highestValue = this.decision[0];
+        
+        for (var i = 0 - (world.height - 1); i < world.height; i++)
+        {
+            if (this.position + i < world.height && this.position + i >= 0)
             {
                 if (this.decision[i] > highestValue)
                 {
@@ -124,73 +128,22 @@ ShipChild.prototype.act = function () {
                     highestValue = this.decision[i];
                 }
             }
-            if (this.position > this.target && this.position > 0)
-            {
-                this.position -= 1;
-            } else if (this.position < this.target && this.position < world.height - 1)
-            {
-                this.position += 1;
-            }
-            
-            if (world.space[1][this.position] == 1)
-            {
-                this.state = 0;
-                contestants_alive -= 1;
-            }
-        } else if (perception_mode === "relative")
-        {
-            for (var i = 0 - (world.height - 1); i < world.height; i++)
-            {
-                this.decision[i] = 0;
-            }
-            
-            for (var i = 0; i < this.behaviour.length; i++)
-            {
-                for (var j = 0 - (world.height - 1); j < world.height; j++)
-                {
-                    if (this.position + j < world.height - 1 && this.position + j >= 0)
-                    {
-                        var current_field = world.space[i][this.position + j];
-                        if (current_field == 0)
-                        {
-                            this.decision[j] = this.decision[j] + this.behaviour[i][j + (world.height - 1)][0];
-                        } else if (current_field == 1)
-                        {
-                            this.decision[j] = this.decision[j] + this.behaviour[i][j + (world.height - 1)][1];
-                        }
-                    }
-                }
-            }
-            
-            this.target = 0;
-            var highestValue = this.decision[0];
-            
-            for (var i = 0 - (world.height - 1); i < world.height; i++)
-            {
-                if (this.position + i < world.height && this.position + i >= 0)
-                {
-                    if (this.decision[i] > highestValue)
-                    {
-                        this.target = i;
-                        highestValue = this.decision[i];
-                    }
-                }
-            }
-            
-            if (this.target > 0)
-            {
-                this.position += 1;
-            } else if (this.target < 0)
-            {
-                this.position -= 1;
-            }
-            
-            if (world.space[1][this.position] == 1)
-            {
-                this.state = 0;
-                contestants_alive -= 1;
-            }
         }
+        
+        if (this.target > 0)
+        {
+            this.position += 1;
+        } else if (this.target < 0)
+        {
+            this.position -= 1;
+        }
+        
+        if (world.space[1][this.position] == 1)
+        {
+            this.state = 0;
+            contestants_alive -= 1;
+        }
+        
     }
 };
 
@@ -301,7 +254,6 @@ function reset() {
     
     world = new World(width, height);
     
-    // Determine the best 33%
     winner_ids = createArray(contestants, 2);
     for (var i = 0; i < contestants; i++)
     {
@@ -330,6 +282,7 @@ function reset() {
     $('#lifetimes').prepend($('<option style="color:' + lifetime_color + '"></option>').html(generation + " - " + winner_lifetime));
     
     contestants_alive = contestants;
+    survivorAmount = parseInt($('#user_survivor_amount').val());
     mutation_probability = ($('#user_mutation').val() / 100);
     difficultyAmount = parseFloat($('#user_diffAmount').val());
     obstacleXDistance = parseInt($('#user_obstacle_distance').val());
@@ -351,7 +304,7 @@ function reset() {
     }
     
     winner_genes = [];
-    for (var i = 0; i < Math.round(contestants / 5); i++)
+    for (var i = 0; i < survivorAmount; i++)
     {
         winner_genes[i] = ships[winner_ids[i][0]].behaviour;
     }
@@ -375,7 +328,7 @@ function reset() {
         }
         prepareCanvas(i);
         parent += 1;
-        if (parent >= Math.round(contestants / 5))
+        if (parent >= survivorAmount)
         {
             parent = 0;
         }
@@ -416,8 +369,6 @@ function reset() {
         $("#chartContainer").CanvasJSChart(options);
         
     });
-    
-    
     
     start(speed);
 }
@@ -466,6 +417,7 @@ $('#run').click(function () {
     width = parseInt($('#user_width').val());
     height = parseInt($('#user_height').val());
     contestants = parseInt($('#user_contestants').val());
+    survivorAmount = parseInt($('#user_survivor_amount').val());
     mutation_probability = ($('#user_mutation').val() / 100);
     difficultyAmount = parseFloat($('#user_diffAmount').val());
     obstacleXDistance = parseInt($('#user_obstacle_distance').val());
