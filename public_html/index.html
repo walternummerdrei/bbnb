@@ -2,26 +2,12 @@
 <html>
     <head>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-        <script type="text/javascript" src="ressources/js/jquery.canvasjs.min.js"></script>
+        <script type="text/javascript" src="resources/js/jquery.canvasjs.min.js"></script>
         <meta charset="utf-8" />
         <title>Learner</title>
-        <style>
-            * { padding: 0; margin: 0px; }
-            html { height: 100%; }
-            body { background-image: url('ressources/img/stardust.png'); background-repeat: repeat; height: 100%; }
-            #top { display: flex; flex-direction: row; justify-content: center; border-bottom: 1px solid grey; padding: 5px; background: #e5e5e5; }
-            #content { height: available; }
-            canvas { position: relative; background: rgba(50,50,50,.5); display: block; margin: 5px auto; border:1px solid black;}
-            #user_input { margin-right: 5px; padding-right: 5px; display: flex; flex-direction: column; width: 150px; }
-            #user_input:not(:last-child) { border-right: 1px solid grey; }
-            #user_input * { margin: 3px; }
-            #generation { font-weight: bold; }
-            #lifetimes { width: 100px; }
-            #chartContainer { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%)}
-            .box { border-top:1px solid grey; }
-            #user_nextlevel { width: 25%; }
-        </style>
+        <link rel="stylesheet" type="text/css" href="resources/css/style.css">
     </head>
+    
     <body>
         <div id="top">
             <div id="user_input">
@@ -72,8 +58,8 @@
         <div id="content">
 
         </div>
-        <script src="ressources/js/seedrandom.min.js"></script>
-        <script src="ressources/js/game.js"></script>
+        <script src="resources/js/seedrandom.min.js"></script>
+        <script src="resources/js/game.js"></script>
         <div id="chartContainer" style="height: 300px; width: 600px;"></div>
     </body>
 </html>
