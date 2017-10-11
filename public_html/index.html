@@ -12,19 +12,19 @@
         <div id="top">
             <div class="user_input user_input_left">
                 <h3>World</h3>
-                Width:<input type="number" id="user_width" value="11">
-                Height:<input type="number" id="user_height" value="7">
-                Difficulty (%):<input type="number" id="user_diffAmount"  value="40">
+                Width:<input type="number" id="user_width" value="10">
+                Height:<input type="number" id="user_height" value="6">
+                Difficulty (%):<input type="number" id="user_diffAmount"  value="25">
                 X-distance between obstacles:<input type="number" id="user_obstacle_distance" value="2">
-                World seed:<input type="number" id="user_seed" value="564">
+                World seed:<input type="number" id="user_seed" value="1337">
                 <div class="box">
-                        <input type="checkbox" id="user_autolevel" name="autolevel" value="true" checked> New seed every
+                        <input type="checkbox" id="user_autolevel" name="autolevel" value="false"> New seed every
                         <input type="number" id="user_nextlevel" value="20"> Generations
-                    </div>
+                </div>
             </div>
             <div class="user_input user_input_left">
                 <h3>Creatures</h3>
-                Generation size:<input type="text" id="user_contestants" value="100">
+                Generation size:<input type="text" id="user_contestants" value="200">
                 Survivors per gen.:<input type="number" id="user_survivor_amount" value="10">
                 Mutation probability:<input type="number" id="user_mutation" value="10">
                 Perception-Mode:
@@ -41,6 +41,10 @@
                     <option value="true" selected>Yes</option>
                     <option value="false">No</option>
                 </select>
+                <div class="box">
+                    <input type="checkbox" id="user_auto_increase_difficulty" name="autolevel" value="false"> Increase difficulty when distance
+                    <input type="number" id="user_increase_difficulty_threshold" value="1000"> reached
+            </div>
             </div>
             <div class="user_input user_input_center">
                 <button type="button" id="run">Start run!</button>

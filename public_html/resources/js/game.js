@@ -17,28 +17,25 @@ World.prototype.slide = function () {
 
     for (var i = 0; i < this.height; i++)
     {
-        if (worldtime % (obstacleXDistance + 1) === 0) {
-            if ((Math.random() * 100) < difficultyAmount) {
+        if (worldtime % (obstacleXDistance + 1) === 0 && (Math.random() * 100) < difficultyAmount) {
+        
+            this.space[this.width - 1][i] = 1;
+            amountOfNewObstacles++;
 
-                this.space[this.width - 1][i] = 1;
-                amountOfNewObstacles++;
-
-                if (amountOfNewObstacles >= this.height) {
-                    for (var i = 0; i < this.height; i++) {
-                        this.space[this.width - 1][i] = 0;
-                    }
+            if (amountOfNewObstacles >= this.height) {
+                for (var i = 0; i < this.height; i++) {
+                    setNoObstacle(this.width, i);
                 }
-            } else {
-                this.space[this.width - 1][i] = 0;
             }
         } else {
-            this.space[this.width - 1][i] = 0;
+            setNoObstacle(this.width, i);
         }
-        
     }
-    
-    
 };
+
+function setNoObstacle(x, y) {
+    world.space[x - 1][y] = 0;
+}
 
 World.prototype.initialize = function () {
     for (var i = 0; i < this.width; i++) {
@@ -92,29 +89,23 @@ ShipChild.prototype.act = function () {
     {
         this.lifetime++; // Age, the higher the fitter 
 
-        for (var i = 0 - (world.height - 1); i < world.height; i++)
-        {
+        for (var i = 0 - (world.height - 1); i < world.height; i++) {
             this.decision[i] = 0;
         }
         
-        for (var i = 0; i < this.behaviour.length; i++)
-        {
-            for (var j = 0 - (world.height - 1); j < world.height; j++)
-            {
-                if (this.position + j < world.height - 1 && this.position + j >= 0)
-                {
+        for (var i = 0; i < this.behaviour.length; i++) {
+            for (var j = 0 - (world.height - 1); j < world.height; j++) {
+                if (this.position + j < world.height - 1 && this.position + j >= 0) {
                     var current_field = world.space[i][this.position + j];
-                    if (current_field == 0)
-                    {
+                    if (current_field == 0) {
                         this.decision[j] = this.decision[j] + this.behaviour[i][j + (world.height - 1)][0];
-                    } else if (current_field == 1)
-                    {
+                    } else if (current_field == 1) {
                         this.decision[j] = this.decision[j] + this.behaviour[i][j + (world.height - 1)][1];
-                    }
+                    } 
                 }
             }
         }
-        
+
         this.target = 0;
         var highestValue = this.decision[0];
         
@@ -162,26 +153,23 @@ ShipChild.prototype.mutate = function () {
 };
 
 function MutateValue(val) {
-    if (val === undefined)
-    {
+    if (val === undefined) {
         val = 0;
     }
     
-    if (Math.random() < mutation_probability)
-    {
+    if (Math.random() < mutation_probability) {
         val += (weightedRandom(200, 4) - 1);
     }
-    return val;
     
-    if (val < -20)
-    {
+    if (val < -20) {
         val = -20;
     }
     
-    if (val > 20)
-    {
+    if (val > 20) {
         val = 20;
     }
+
+    return val;
 }
 
 
@@ -190,7 +178,7 @@ function MutateValue(val) {
 // GAME FUNCTIONS
 function draw() {
     world.slide();
-    updateCurrentStats();
+    displayCurrentStats();
     for (var i = 0; i < contestants; i++)
     {
         ships[i].act();
@@ -246,7 +234,7 @@ function draw() {
     worldtime++;
 }
 
-function updateCurrentStats() {
+function displayCurrentStats() {
     $('#show_worldtime').text(worldtime);
     $('#show_creatures_alive').text(contestants_alive);
 }
@@ -267,20 +255,15 @@ function reset() {
         winner_ids[i][1] = ships[i].lifetime;
     }
     
-    winner_ids = winner_ids.sort(function (a, b) {
-        return b[1] - a[1];
-    });
+    winner_ids = winner_ids.sort(function (a, b) { return b[1] - a[1]; });
     
     // Decides color of generation history
     winner_lifetime = winner_ids[0][1];
-    if (winner_lifetime > winner_lifetime_old)
-    {
+    if (winner_lifetime > winner_lifetime_old) {
         lifetime_color = 'green';
-    } else if (winner_lifetime < winner_lifetime_old)
-    {
+    } else if (winner_lifetime < winner_lifetime_old) {
         lifetime_color = 'red';
-    } else
-    {
+    } else {
         lifetime_color = 'black';
     }
     winner_lifetime_old = winner_lifetime;
@@ -296,6 +279,7 @@ function reset() {
     remove_on_death = $('#user_rmOnDeath option:selected').val();
     user_seed = parseInt($('#user_seed').val());
     user_nextlevel = parseInt($('#user_nextlevel').val());
+
     if ($('#user_autolevel').prop("checked") === true)
     {
         if (levelprogression >= user_nextlevel)
@@ -344,7 +328,7 @@ function reset() {
     $('#generation').text('Generation ' + generation);
     
     
-    $(function () {
+    /* $(function () {
         var limit = 10000;    //increase number of dataPoints by increasing the limit
         var data = [];
         
@@ -374,7 +358,7 @@ function reset() {
         
         $("#chartContainer").CanvasJSChart(options);
         
-    });
+    }); */
     
     start(speed);
 }
