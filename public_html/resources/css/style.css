@@ -73,3 +73,7 @@ canvas {
 #user_nextlevel {
     width: 25%;
 }
+
+#user_increase_difficulty_threshold {
+    width: 35%;
+}

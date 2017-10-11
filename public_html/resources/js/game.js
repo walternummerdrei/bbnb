@@ -284,12 +284,21 @@ function reset() {
     {
         if (levelprogression >= user_nextlevel)
         {
-            user_seed = user_seed + 1;
+            user_seed++;
             $('#user_seed').val(user_seed);
             levelprogression = 0;
         } else
         {
             levelprogression++;
+        }
+    }
+
+    if ($('#user_auto_increase_difficulty').prop("checked") === true)
+    {
+        if (winner_lifetime >= increaseDifficultyThreshold)
+        {
+            difficultyAmount++;
+            $('#user_diffAmount').val(difficultyAmount);
         }
     }
     
@@ -417,6 +426,7 @@ $('#run').click(function () {
     user_seed = $('#user_seed').val();
     user_nextlevel = parseInt($('#user_nextlevel').val());
     levelprogression = 0;
+    increaseDifficultyThreshold = parseInt($('#user_increase_difficulty_threshold').val());
     
     $('#user_width').prop('disabled', true);
     $('#user_height').prop('disabled', true);
