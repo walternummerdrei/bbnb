@@ -279,6 +279,7 @@ function reset() {
     remove_on_death = $('#user_rmOnDeath option:selected').val();
     user_seed = parseInt($('#user_seed').val());
     user_nextlevel = parseInt($('#user_nextlevel').val());
+    increaseDifficultyThreshold = parseInt($('#user_increase_difficulty_threshold').val());
 
     if ($('#user_autolevel').prop("checked") === true)
     {
@@ -432,6 +433,7 @@ $('#run').click(function () {
     $('#user_height').prop('disabled', true);
     $('#user_contestants').prop('disabled', true);
     $('#run').prop('disabled', true);
+    $('#pause').prop('disabled', false);
     $('#perception_mode').prop('disabled', true);
     
     dataSeries = {type: "line"};
@@ -469,10 +471,14 @@ $('#run').click(function () {
 
 $('#pause').click(function () {
     stop();
+    $('#pause').prop('disabled', true);
+    $('#play').prop('disabled', false);
 });
 
 $('#play').click(function () {
     start(speed);
+    $('#pause').prop('disabled', false);
+    $('#play').prop('disabled', true);
 });
 
 
