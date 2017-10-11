@@ -26,13 +26,19 @@
                 Mutation probability:<input type="number" id="user_mutation" value="10">
                 Perception-Mode:
                 <select id="perception_mode" name="perception_mode">
-                    <option value="absolute">Absolute (broken)</option>
-                    <option value="relative" selected>Relative</option>
+                    <option value="full" selected>All</option>
+                    <option value="selective">Selective</option>
                 </select>
             </div>
             <div class="user_input">
                 <h3>Options</h3>
-                Simulation Speed:<input type="number" id="user_speed" value="0">
+                Simulation Speed:<input type="number" id="user_speed" value="110">
+                <div class="speed_button_box">
+                    <button class="button_speed" type="button" id="speed_slow" disabled>slow</button>
+                    <button class="button_speed" type="button" id="speed_normal" disabled>normal</button>
+                    <button class="button_speed" type="button" id="speed_fast" disabled>fast</button>
+                    <button class="button_speed" type="button" id="speed_max" disabled>max</button>
+                </div>
                 Move dead to bottom:
                 <select id="user_rmOnDeath" name="remove_on_death">
                     <option value="true" selected>Yes</option>

@@ -46,7 +46,7 @@ canvas {
     border-right: 1px solid grey;
 }
 
-.user_input * {
+.user_input > * {
     margin: 3px;
 }
 

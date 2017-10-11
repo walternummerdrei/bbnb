@@ -161,12 +161,12 @@ function MutateValue(val) {
         val += (weightedRandom(200, 4) - 1);
     }
     
-    if (val < -20) {
-        val = -20;
+    if (val < -12) {
+        val = -12;
     }
     
-    if (val > 20) {
-        val = 20;
+    if (val > 12) {
+        val = 12;
     }
 
     return val;
@@ -271,15 +271,8 @@ function reset() {
     $('#lifetimes').prepend($('<option style="color:' + lifetime_color + '"></option>').html(generation + " - " + winner_lifetime));
     
     contestants_alive = contestants;
-    survivorAmount = parseInt($('#user_survivor_amount').val());
-    mutation_probability = ($('#user_mutation').val() / 100);
-    difficultyAmount = parseFloat($('#user_diffAmount').val());
-    obstacleXDistance = parseInt($('#user_obstacle_distance').val());
-    speed = parseInt($('#user_speed').val());
-    remove_on_death = $('#user_rmOnDeath option:selected').val();
-    user_seed = parseInt($('#user_seed').val());
-    user_nextlevel = parseInt($('#user_nextlevel').val());
-    increaseDifficultyThreshold = parseInt($('#user_increase_difficulty_threshold').val());
+
+    getUserValues();
 
     if ($('#user_autolevel').prop("checked") === true)
     {
@@ -373,6 +366,18 @@ function reset() {
     start(speed);
 }
 
+function getUserValues() {
+    survivorAmount = parseInt($('#user_survivor_amount').val());
+    mutation_probability = ($('#user_mutation').val() / 100);
+    difficultyAmount = parseFloat($('#user_diffAmount').val());
+    obstacleXDistance = parseInt($('#user_obstacle_distance').val());
+    speed = parseInt($('#user_speed').val());
+    remove_on_death = $('#user_rmOnDeath option:selected').val();
+    user_seed = parseInt($('#user_seed').val());
+    user_nextlevel = parseInt($('#user_nextlevel').val());
+    increaseDifficultyThreshold = parseInt($('#user_increase_difficulty_threshold').val());
+}
+
 function start(speed) {
     game = setInterval(draw, speed);
 }
@@ -381,11 +386,14 @@ function stop() {
     clearInterval(game);
 }
 
+function restart() {
+    stop();
+    start(speed);
+}
+
 function showWinnerGenes() {
     
-    winner_canvas_html = "";
-    
-    winner_canvas_html += '<canvas id="winner_canvas" width="' + world.width * 10 + '" height="' + ((world.height * 2) - 1) * 10 + '"></canvas>';
+    winner_canvas_html = '<canvas id="winner_canvas" width="' + world.width * 10 + '" height="' + ((world.height * 2) - 1) * 10 + '"></canvas>';
     
     $('#winner_canvas').remove();
     $('.last_winner').append(winner_canvas_html);
@@ -398,8 +406,8 @@ function showWinnerGenes() {
     {
         for (var k = 0; k < (world.height * 2) - 1; k++)
         {
-            var a = 125 + (6 * (Math.round(winner_genes[0][j][k][0])).toString(16));
-            var b = 125 + (6 * (Math.round(winner_genes[0][j][k][1])).toString(16));
+            var a = 125 + (10 * (Math.round(winner_genes[0][j][k][0])).toString(16));
+            var b = 125 + (10 * (Math.round(winner_genes[0][j][k][1])).toString(16));
             winner_ctx.beginPath();
             winner_ctx.rect(j, k, 1, 1);
             winner_ctx.fillStyle = "rgba(" + a + ", " + b + ", 255, 1)";
@@ -435,6 +443,11 @@ $('#run').click(function () {
     $('#run').prop('disabled', true);
     $('#pause').prop('disabled', false);
     $('#perception_mode').prop('disabled', true);
+
+    $('#speed_slow').prop('disabled', false);
+    $('#speed_normal').prop('disabled', false);
+    $('#speed_fast').prop('disabled', false);
+    $('#speed_max').prop('disabled', false);
     
     dataSeries = {type: "line"};
     dataPoints = [];
@@ -447,7 +460,7 @@ $('#run').click(function () {
     
     world = new World(width, height);
     
-    ships = {}; // main object
+    ships = {};
     canvas_html = "";
     canvas = [];
     ctx = [];
@@ -459,8 +472,8 @@ $('#run').click(function () {
     $('canvas').remove();
     $('#content').append(canvas_html);
     
-    for (i = 0; i < contestants; i++)
-    {
+    // instantiating contestants
+    for (i = 0; i < contestants; i++) {
         ships[i] = new ShipChild(i, createArray(width, ((height * 2) - 1), 2));
         prepareCanvas(i);
     }
@@ -479,6 +492,30 @@ $('#play').click(function () {
     start(speed);
     $('#pause').prop('disabled', false);
     $('#play').prop('disabled', true);
+});
+
+$('#speed_slow').click(function () {
+    speed = 180;
+    $('#user_speed').val(speed);
+    restart();
+});
+
+$('#speed_normal').click(function () {
+    speed = 110;
+    $('#user_speed').val(speed);
+    restart();
+});
+
+$('#speed_fast').click(function () {
+    speed = 60;
+    $('#user_speed').val(speed);
+    restart();
+});
+
+$('#speed_max').click(function () {
+    speed = 0;
+    $('#user_speed').val(speed);
+    restart();
 });
 
 
