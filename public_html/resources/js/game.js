@@ -90,7 +90,7 @@ ShipChild.prototype.act = function () {
         this.lifetime++; // Age, the higher the fitter 
 
         for (var i = 0 - (world.height - 1); i < world.height; i++) {
-            this.decision[i] = 0;
+            this.decision[i] = 0 ;
         }
         
         for (var i = 0; i < this.behaviour.length; i++) {
@@ -98,10 +98,15 @@ ShipChild.prototype.act = function () {
                 if (this.position + j < world.height - 1 && this.position + j >= 0) {
                     var current_field = world.space[i][this.position + j];
                     if (current_field == 0) {
-                        this.decision[j] = this.decision[j] + this.behaviour[i][j + (world.height - 1)][0];
+                        //this.decision[j] = this.decision[j] + this.behaviour[i][j + (world.height - 1)][0];
+                        //this.decision[j] = this.decision[j] * this.behaviour[i][j + (world.height - 1)][0];
+                        this.decision[j] += 1 * this.behaviour[i][j + (world.height - 1)][0];
                     } else if (current_field == 1) {
-                        this.decision[j] = this.decision[j] + this.behaviour[i][j + (world.height - 1)][1];
-                    } 
+                        //this.decision[j] = this.decision[j] + this.behaviour[i][j + (world.height - 1)][1];
+                        this.decision[j] += 1 * this.behaviour[i][j + (world.height - 1)][1];
+                    } else if (current_field == 2) {
+                        this.decision[j] += 1 * this.behaviour[i][j + (world.height - 1)][2];
+                    }
                 }
             }
         }
@@ -156,19 +161,33 @@ function MutateValue(val) {
     if (val === undefined) {
         val = 0;
     }
-    
-    if (Math.random() < mutation_probability) {
-        val += (weightedRandom(200, 4) - 1);
-    }
-    
-    if (val < -12) {
-        val = -12;
-    }
-    
-    if (val > 12) {
-        val = 12;
+
+    chance = Math.random();
+
+    if (chance < mutation_probability / 10) {
+        if (val == 0) {
+            return limitValue(mutate(val));
+        } else {
+            return 0;
+        }
+        
+    } else {
+        if (chance < mutation_probability) {
+            return limitValue(mutate(val));
+        }
     }
 
+    return val;
+}
+
+function limitValue(val) {
+    if (val < -12) { val = -12; }
+    if (val > 12) { val = 12; }
+    return val;
+}
+
+function mutate(val) {
+    val += (weightedRandom(200, 4) - 1);
     return val;
 }
 
@@ -330,39 +349,6 @@ function reset() {
     generation++;
     $('#generation').text('Generation ' + generation);
     
-    
-    /* $(function () {
-        var limit = 10000;    //increase number of dataPoints by increasing the limit
-        var data = [];
-        
-        dataPoints.push({
-            x: generation,
-            y: winner_lifetime
-        });
-        
-        dataSeries.dataPoints = dataPoints;
-        data.push(dataSeries);
-        
-        //Better to construct options first and then pass it as a parameter
-        var options = {
-            zoomEnabled: true,
-            animationEnabled: false,
-            title: {
-                text: "History of Runs"
-            },
-            axisX: {
-                labelAngle: 30
-            },
-            axisY: {
-                includeZero: false
-            },
-            data: data
-        };
-        
-        $("#chartContainer").CanvasJSChart(options);
-        
-    }); */
-    
     start(speed);
 }
 
@@ -425,17 +411,21 @@ $('#run').click(function () {
     width = parseInt($('#user_width').val());
     height = parseInt($('#user_height').val());
     contestants = parseInt($('#user_contestants').val());
-    survivorAmount = parseInt($('#user_survivor_amount').val());
-    mutation_probability = ($('#user_mutation').val() / 100);
-    difficultyAmount = parseFloat($('#user_diffAmount').val());
-    obstacleXDistance = parseInt($('#user_obstacle_distance').val());
-    speed = parseInt($('#user_speed').val());
     perception_mode = $('#perception_mode option:selected').val();
-    remove_on_death = $('#user_rmOnDeath option:selected').val();
-    user_seed = $('#user_seed').val();
-    user_nextlevel = parseInt($('#user_nextlevel').val());
+    obstaclesEnabled = $('#user_obstacles').prop("checked");
+    collectablesEnabled = $('#user_collectables').prop("checked");
+
+    worldObjectTypes = 0;
+    if (obstaclesEnabled) {
+        worldObjectTypes++;
+    }
+    if (collectablesEnabled) {
+        worldObjectTypes++;
+    }
+
+    getUserValues();
+    
     levelprogression = 0;
-    increaseDifficultyThreshold = parseInt($('#user_increase_difficulty_threshold').val());
     
     $('#user_width').prop('disabled', true);
     $('#user_height').prop('disabled', true);
@@ -448,9 +438,6 @@ $('#run').click(function () {
     $('#speed_normal').prop('disabled', false);
     $('#speed_fast').prop('disabled', false);
     $('#speed_max').prop('disabled', false);
-    
-    dataSeries = {type: "line"};
-    dataPoints = [];
     
     contestants_alive = contestants;
     generation = 1;
@@ -474,7 +461,7 @@ $('#run').click(function () {
     
     // instantiating contestants
     for (i = 0; i < contestants; i++) {
-        ships[i] = new ShipChild(i, createArray(width, ((height * 2) - 1), 2));
+        ships[i] = new ShipChild(i, createArray(width, ((height * 2) - 1), worldObjectTypes));
         prepareCanvas(i);
     }
     
