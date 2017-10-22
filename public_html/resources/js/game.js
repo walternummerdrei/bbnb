@@ -485,12 +485,20 @@ $('#run').click(function () {
 $('#pause').click(function () {
     stop();
     $('#pause').prop('disabled', true);
+    $('#speed_slow').prop('disabled', true);
+    $('#speed_normal').prop('disabled', true);
+    $('#speed_fast').prop('disabled', true);
+    $('#speed_max').prop('disabled', true);
     $('#play').prop('disabled', false);
 });
 
 $('#play').click(function () {
     start(speed);
     $('#pause').prop('disabled', false);
+    $('#speed_slow').prop('disabled', false);
+    $('#speed_normal').prop('disabled', false);
+    $('#speed_fast').prop('disabled', false);
+    $('#speed_max').prop('disabled', false);
     $('#play').prop('disabled', true);
 });
 
